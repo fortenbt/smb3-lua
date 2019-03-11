@@ -21,6 +21,7 @@ local toggle_display_p_meter                        = false
 local toggle_display_next_p                         = true
 local toggle_display_p_kill_counter                 = true
 local toggle_display_block_y                        = true --for walljumps
+local toggle_display_inair                          = true
 local toggle_display_rerecords                      = false
 local toggle_display_lag_frames                     = false
 local toggle_display_frames                         = false
@@ -55,6 +56,7 @@ local level_vertical_draw_x    = 238 --x position of drawn level on screen when 
 --all of the ram addresses I need, sorry for the garbage (and sometimes inaccurate) names
 local ram_mario_suit       = 0x00ED --mario powerup (0 = small, 1 = big, ...)
 local ram_is_crouching     = 0x056F --set if mario is crouching
+local ram_inair            = 0x00D8 --set if mario is in the air
 local ram_high_x           = 0x0075 --high byte of mario's x position, when mario's x goes above 0xff, this increases by one
 local ram_x                = 0x0090 --mario's x
 local ram_low_x            = 0x074D --mario's subpixel x (16 subpixels in a pixel)
@@ -478,6 +480,11 @@ function display_information()
     
     if toggle_display_block_y then
         gui.drawtext(1, y_counter, string.format("Block Y: %d", memory.readbyte(ram_y) % 16), text_color, text_back_color)
+        y_counter = y_counter + 8
+    end
+    
+    if toggle_display_inair then
+        gui.drawtext(1, y_counter, string.format("InAir?: %d", memory.readbyte(ram_inair)), text_color, text_back_color)
     end
     
     y_counter = 169
